@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using SchoolManagement.Domain.Interfaces.Repositories;
 
 namespace SchoolManagement.Domain.Interfaces.UoW;
 

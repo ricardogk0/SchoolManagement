@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SchoolManagement.Domain.Common;
-using SchoolManagement.Domain.Interfaces;
 using SchoolManagement.Domain.Interfaces.Notifications;
 using SchoolManagement.Domain.Notifications;
 using SchoolManagement.Infrastructure.Context;
 using SchoolManagement.Domain.Entities;
 using System.Linq.Expressions;
+using SchoolManagement.Domain.Interfaces.Repositories;
 
 namespace SchoolManagement.Infrastructure.Repositories;
 
@@ -125,6 +125,20 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
         catch (Exception ex)
         {
             _notifier.Handle($"Error getting filtered {typeof(TEntity).Name}: {ex.Message}", NotificationType.Error);
+            throw;
+        }
+    }
+
+    public virtual async Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> predicate)
+    {
+        try
+        {
+            _notifier.Handle($"Finding {typeof(TEntity).Name}.");
+            return await _dbSet.Where(predicate).ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            _notifier.Handle($"Error finding {typeof(TEntity).Name}: {ex.Message}", NotificationType.Error);
             throw;
         }
     }

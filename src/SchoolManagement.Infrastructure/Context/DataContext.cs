@@ -14,6 +14,7 @@ public class DataContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        //TODO colocar uma variavel de ambiente para habilitar/desabilitar codefirst
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ApplyConfiguration(new StudentMapping());
