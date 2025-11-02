@@ -1,0 +1,9 @@
+{
+  "ValidationErrorMessages": {
+    "ErrorCreateStudent": {
+      "Message": "error_create_student",
+      "Details": "Error Create Student",
+      "StatusCode": 400
+    }
+  }
+}

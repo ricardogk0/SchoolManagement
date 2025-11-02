@@ -13,13 +13,13 @@ public abstract class EntityBaseMapping<TEntity> : IEntityTypeConfiguration<TEnt
         builder.Property(e => e.CreatedAt)
                .IsRequired();
 
-        builder.Property(e => e.CreateBy)
+        builder.Property(e => e.CreatedBy)
                .IsRequired();
 
         builder.Property(e => e.UpdatedAt)
                 .IsRequired(false);
 
-        builder.Property(e => e.UpdateBy)
+        builder.Property(e => e.UpdatedBy)
                 .IsRequired(false);
 
         builder.Property(e => e.IsDeleted)

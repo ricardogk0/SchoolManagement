@@ -15,6 +15,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - Services", "2 - Service
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchoolManagement.Service", "src\SchoolManagement.Service\SchoolManagement.Service.csproj", "{A871C9A9-A2F8-4A8E-9A32-4A16AADC9D57}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - Application", "1 - Application", "{CA18F771-984A-4F9F-9764-34E6D77E3651}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchoolManagement.API", "src\SchoolManagement.API\SchoolManagement.API.csproj", "{1FE67F63-490A-449A-9BF0-48981529707D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,10 @@ Global
 		{A871C9A9-A2F8-4A8E-9A32-4A16AADC9D57}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A871C9A9-A2F8-4A8E-9A32-4A16AADC9D57}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A871C9A9-A2F8-4A8E-9A32-4A16AADC9D57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FE67F63-490A-449A-9BF0-48981529707D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FE67F63-490A-449A-9BF0-48981529707D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FE67F63-490A-449A-9BF0-48981529707D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FE67F63-490A-449A-9BF0-48981529707D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -41,6 +49,7 @@ Global
 		{854D49B4-DD89-402E-BF63-416F31655F05} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{B9402237-AFD0-4CC9-8B99-65B132FA10AB} = {29D6E0F2-E43D-4009-8046-F1A87F7FF5C8}
 		{A871C9A9-A2F8-4A8E-9A32-4A16AADC9D57} = {27FC0D31-7512-45E3-A0E9-AC57DB706BCC}
+		{1FE67F63-490A-449A-9BF0-48981529707D} = {CA18F771-984A-4F9F-9764-34E6D77E3651}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5710B1EF-4D02-4092-8B09-DAE645D37D7F}
