@@ -15,7 +15,7 @@ public class PaginationResponse<TModel> : BasePagination
         Data = data;
         TotalCount = count;
         TotalPages = CalculateTotalPages(count, pageSize);
-        PageIndex = pageNumber;
+        PageNumber = pageNumber;
         PageSize = pageSize;
     }
 

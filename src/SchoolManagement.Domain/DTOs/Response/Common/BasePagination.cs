@@ -6,12 +6,12 @@ public abstract class BasePagination
     private const int DEFAULT_PAGE_SIZE = 10;
 
     private int _pageSize = DEFAULT_PAGE_SIZE;
-    private int _pageIndex = 1;
+    private int _pageNumber = 1;
 
-    public int PageIndex
+    public int PageNumber
     {
-        get => _pageIndex;
-        set => _pageIndex = value > 0 ? value : 1;
+        get => _pageNumber;
+        set => _pageNumber = value > 0 ? value : 1;
     }
     public int PageSize
     {

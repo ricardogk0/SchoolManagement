@@ -68,6 +68,7 @@ public static class ApiSettings
     {
         services.AddScoped<IStudentService, StudentService>();
         services.AddScoped<IClassService, ClassService>();
+        services.AddScoped<IRegistrationService, RegistrationService>();
     }
 
     private static void RegisterRepositories(this IServiceCollection services)

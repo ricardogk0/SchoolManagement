@@ -9,6 +9,11 @@
       "Message": "error_create_class",
       "Details": "Error Create Class",
       "StatusCode": 400
+    },
+    "ErrorCreateRegistration": {
+      "Message": "error_create_registration",
+      "Details": "Error Create Registration",
+      "StatusCode": 400
     }
   }
 }

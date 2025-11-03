@@ -21,10 +21,17 @@ public class StudentMapper : Profile
         
         CreateMap<StudentEntity, StudentResponseDto>();
 
+        CreateMap<PaginatedResponse<StudentEntity>, PaginatedResponse<StudentResponseDto>>()
+            .ForMember(dest => dest.Items,
+               opt => opt.MapFrom(src => src.Items
+                   .OrderBy(s => s.Name)));
+
         CreateMap<IEnumerable<StudentEntity>, PaginatedResponse<StudentResponseDto>>()
             .ConvertUsing((src, dest, context) =>
             {
-                var studentDtos = context.Mapper.Map<List<StudentResponseDto>>(src);
+                var studentDtos = context.Mapper.Map<List<StudentResponseDto>>(src)
+                    .OrderBy(s => s.Name)
+                    .ToList();
                 return new PaginatedResponse<StudentResponseDto>(
                     studentDtos, 
                     studentDtos.Count, 

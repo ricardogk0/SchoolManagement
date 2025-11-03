@@ -28,9 +28,9 @@ public class StudentService : BaseService, IStudentService
         _validationMessages = validationErrorMessages;
     }
 
-    public async Task<PaginatedResponse<StudentResponseDto>> GetAllAsync()
+    public async Task<PaginatedResponse<StudentResponseDto>> GetAllAsync(Filters filters)
     {
-        var students = await _unitOfWork.Students.GetAll();
+        var students = await _unitOfWork.Students.GetAllPaged(filters.PageNumber, filters.PageSize);
         return _mapper.Map<PaginatedResponse<StudentResponseDto>>(students);
     }
 

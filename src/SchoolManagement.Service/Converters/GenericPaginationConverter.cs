@@ -17,7 +17,7 @@ public class GenericPaginationConverter<TSource, TDestination> :
 
         var metadata = new PaginationMetadata
         {
-            PageIndex = source?.PageIndex,
+            PageIndex = source?.PageNumber,
             PageSize = source?.PageSize,
             TotalCount = source?.TotalCount,
             TotalPages = source?.TotalPages

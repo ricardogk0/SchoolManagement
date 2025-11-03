@@ -1,4 +1,4 @@
-﻿using SchoolManagement.Domain.Common;
+using SchoolManagement.Domain.Common;
 using SchoolManagement.Domain.DTOs.Request;
 using SchoolManagement.Domain.Dtos.Response;
 using SchoolManagement.Domain.DTOs.Response.Common;
@@ -8,7 +8,7 @@ namespace SchoolManagement.Domain.Interfaces.Services;
 
 public interface IStudentService
 {
-    Task<PaginatedResponse<StudentResponseDto>> GetAllAsync();
+    Task<PaginatedResponse<StudentResponseDto>> GetAllAsync(Filters filters);
     Task<StudentResponseDto?> GetByIdAsync(Guid studentId);
     Task<ResponseModel<StudentResponseDto>> CreateStudentAsync(StudentCreateDto student, string userEmail);
     Task<StudentResponseDto?> UpdateStudentAsync(Guid studentId, StudentUpdateDto student, string userEmail);

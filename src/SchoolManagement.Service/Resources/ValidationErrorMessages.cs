@@ -6,4 +6,5 @@ public class ValidationErrorMessages
 {
     public ErrorInfo ErrorCreateStudent { get; set; }
     public ErrorInfo ErrorCreateClass { get; set; }
+    public ErrorInfo ErrorCreateRegistration { get; set; }
 }

@@ -22,7 +22,9 @@ public class ClassMapper : Profile
         CreateMap<IEnumerable<ClassEntity>, PaginatedResponse<ClassResponseDto>>()
             .ConvertUsing((src, dest, context) =>
             {
-                var dtos = context.Mapper.Map<List<ClassResponseDto>>(src);
+                var dtos = context.Mapper.Map<List<ClassResponseDto>>(src)
+                        .OrderBy(c => c.ClassName)
+                        .ToList();
                 return new PaginatedResponse<ClassResponseDto>(
                     dtos,
                     dtos.Count,

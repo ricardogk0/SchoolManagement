@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SchoolManagement.Domain.Dtos.Response;
+using SchoolManagement.Domain.DTOs.Request;
+using SchoolManagement.Domain.DTOs.Response;
+using SchoolManagement.Domain.DTOs.Response.Common;
 
-namespace SchoolManagement.Domain.Interfaces.Services
+namespace SchoolManagement.Domain.Interfaces.Services;
+
+public interface IRegistrationService
 {
-    internal class IRegistrationService
-    {
-    }
+    Task<ResponseModel<RegistrationResponseDto>> RegisterStudentAsync(RegistrationCreateDto registrationDto);
+    Task<ResponseModel<IEnumerable<StudentResponseDto>>> GetStudentsByClassAsync(Guid classId);
 }

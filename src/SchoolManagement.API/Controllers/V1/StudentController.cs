@@ -1,5 +1,6 @@
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
+using SchoolManagement.Domain.Common;
 using SchoolManagement.Domain.DTOs.Request;
 using SchoolManagement.Domain.Interfaces.Services;
 
@@ -17,9 +18,9 @@ public class StudentController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllStudents()
+    public async Task<IActionResult> GetAllStudents(Filters filters)
     {
-        var students = await _studentService.GetAllAsync();
+        var students = await _studentService.GetAllAsync(filters);
         return Ok(students);
     }
 
