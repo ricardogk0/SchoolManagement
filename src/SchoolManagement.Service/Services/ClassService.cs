@@ -30,7 +30,15 @@ public class ClassService : BaseService, IClassService
     public async Task<PaginatedResponse<ClassResponseDto>> GetAllAsync()
     {
         var classes = await _unitOfWork.Classes.GetAll();
-        return _mapper.Map<PaginatedResponse<ClassResponseDto>>(classes);
+        var dtos = _mapper.Map<List<ClassResponseDto>>(classes);
+
+        foreach (var dto in dtos)
+        {
+            dto.StudentCount = await _unitOfWork.Registrations.GetStudentCountByClass(dto.Id);
+        }
+
+        var ordered = dtos.OrderBy(c => c.ClassName).ToList();
+        return new PaginatedResponse<ClassResponseDto>(ordered, ordered.Count, 1, ordered.Count);
     }
 
     public async Task<ClassResponseDto?> GetByIdAsync(Guid classId)
@@ -38,7 +46,12 @@ public class ClassService : BaseService, IClassService
         try
         {
             var classe = await _unitOfWork.Classes.GetById(classId);
-            return _mapper.Map<ClassResponseDto>(classe);
+            var dto = _mapper.Map<ClassResponseDto>(classe);
+            if (dto != null)
+            {
+                dto.StudentCount = await _unitOfWork.Registrations.GetStudentCountByClass(dto.Id);
+            }
+            return dto;
         }
         catch (Exception ex)
         {
@@ -74,6 +87,7 @@ public class ClassService : BaseService, IClassService
             await _unitOfWork.CommitTransactionAsync();
 
             var response = _mapper.Map<ClassResponseDto>(classEntity);
+            response.StudentCount = 0;
 
             return ResponseModel<ClassResponseDto>.Success(response);
         }
@@ -119,7 +133,9 @@ public class ClassService : BaseService, IClassService
             await _unitOfWork.SaveAsync();
             await _unitOfWork.CommitTransactionAsync();
 
-            return _mapper.Map<ClassResponseDto>(existingClass);
+            var dto = _mapper.Map<ClassResponseDto>(existingClass);
+            dto.StudentCount = await _unitOfWork.Registrations.GetStudentCountByClass(dto.Id);
+            return dto;
         }
         catch (Exception ex)
         {

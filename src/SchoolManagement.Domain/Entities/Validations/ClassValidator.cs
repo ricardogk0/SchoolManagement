@@ -13,7 +13,7 @@ public class ClassValidator : AbstractValidator<ClassEntity>
 
         RuleFor(c => c.Description)
             .NotEmpty().WithMessage("Description cannot be empty.")
-            .MaximumLength(250).WithMessage("Description cannot exceed 255 characters.")
+            .MaximumLength(250).WithMessage("Description cannot exceed 250 characters.")
             .MinimumLength(10).WithMessage("Description must be at least 10 characters long.");
     }
 

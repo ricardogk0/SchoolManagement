@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using SchoolManagement.Domain.Entities;
 using SchoolManagement.Domain.Interfaces.Notifications;
 using SchoolManagement.Domain.Interfaces.Repositories;
@@ -49,6 +49,23 @@ public class RegistrationRepository : IRegistrationRepository
 
             _notifier.Handle($"Found {students.Count} registration student(s) in class {classId}.");
             return students;
+        }
+        catch (Exception ex)
+        {
+            _notifier.Handle(ex);
+            throw;
+        }
+    }
+
+    public async Task<int> GetStudentCountByClass(Guid classId)
+    {
+        try
+        {
+            var count = await _dbSet
+                .Where(r => r.Class.Id == classId && !r.IsDeleted)
+                .CountAsync();
+            _notifier.Handle($"Counted {count} student(s) for class {classId}.");
+            return count;
         }
         catch (Exception ex)
         {
