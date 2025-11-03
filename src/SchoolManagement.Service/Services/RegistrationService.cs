@@ -3,11 +3,13 @@ using SchoolManagement.Domain.Dtos.Response;
 using SchoolManagement.Domain.DTOs.Request;
 using SchoolManagement.Domain.DTOs.Response;
 using SchoolManagement.Domain.DTOs.Response.Common;
+using SchoolManagement.Domain.Entities;
+using SchoolManagement.Domain.Entities.Validations;
 using SchoolManagement.Domain.Interfaces.Notifications;
 using SchoolManagement.Domain.Interfaces.Services;
 using SchoolManagement.Domain.Interfaces.UoW;
 using SchoolManagement.Service.Resources;
-using SchoolManagement.Domain.Entities;
+using System.Net;
 
 namespace SchoolManagement.Service.Services;
 
@@ -43,6 +45,19 @@ public class RegistrationService : BaseService, IRegistrationService
                 Student = student,
                 Class = @class
             };
+
+            var validator = new RegistrationValidator(_unitOfWork);
+            validator.ConfigureRulesForCreate();
+
+            var validationResult = await validator.ValidateAsync(entity);
+            if (!validationResult.IsValid)
+            {
+                _notifier.NotifyValidationErrors(validationResult);
+                var errors = _notifier.GetNotifications()
+                    .Select(n => new ErrorInfo { Message = n.Message, StatusCode = HttpStatusCode.BadRequest, Details = n.Type.ToString() }).Where(e => e.Details == "Error")
+                    .FirstOrDefault();
+                return ResponseModel<RegistrationResponseDto>.Failure(errors);
+            }
 
             entity.CreatedAt = DateTime.UtcNow;
             entity.CreatedBy = "ricardokevi@gmail.com";

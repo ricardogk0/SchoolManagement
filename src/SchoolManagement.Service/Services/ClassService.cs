@@ -10,6 +10,7 @@ using SchoolManagement.Domain.Interfaces.Services;
 using SchoolManagement.Domain.Interfaces.UoW;
 using SchoolManagement.Domain.Notifications;
 using SchoolManagement.Service.Resources;
+using System.Net;
 
 namespace SchoolManagement.Service.Services;
 
@@ -77,7 +78,7 @@ public class ClassService : BaseService, IClassService
             {
                 _notifier.NotifyValidationErrors(validationResult);
                 var errors = _notifier.GetNotifications()
-                    .Select(n => new ErrorInfo { Message = n.Message })
+                    .Select(n => new ErrorInfo { Message = n.Message, StatusCode = HttpStatusCode.BadRequest, Details = n.Type.ToString() }).Where(e => e.Details == "Error")
                     .FirstOrDefault();
                 return ResponseModel<ClassResponseDto>.Failure(errors);
             }

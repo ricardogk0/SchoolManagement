@@ -2,7 +2,9 @@ using Microsoft.EntityFrameworkCore;
 using SchoolManagement.Domain.Entities;
 using SchoolManagement.Domain.Interfaces.Notifications;
 using SchoolManagement.Domain.Interfaces.Repositories;
+using SchoolManagement.Domain.Notifications;
 using SchoolManagement.Infrastructure.Context;
+using System.Linq.Expressions;
 
 namespace SchoolManagement.Infrastructure.Repositories;
 
@@ -70,6 +72,20 @@ public class RegistrationRepository : IRegistrationRepository
         catch (Exception ex)
         {
             _notifier.Handle(ex);
+            throw;
+        }
+    }
+
+    public virtual async Task<IEnumerable<RegistrationEntity>> Find(Expression<Func<RegistrationEntity, bool>> predicate)
+    {
+        try
+        {
+            _notifier.Handle($"Finding {typeof(RegistrationEntity).Name}.");
+            return await _dbSet.Where(predicate).ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            _notifier.Handle($"Error finding {typeof(RegistrationEntity).Name}: {ex.Message}", NotificationType.Error);
             throw;
         }
     }

@@ -13,7 +13,7 @@ public class ClassRepository : Repository<ClassEntity>, IClassRepository
     public ClassRepository(DataContext context, INotifier notifier)
         : base(context, notifier) { }
 
-    public override async Task<PaginatedResponse<ClassEntity>> GetAllPaged(int pageNumber, int pageSize)
+    public override async Task<PaginatedResponse<ClassEntity>> GetAllPaged(Filters filter)
     {
         try
         {
@@ -21,15 +21,16 @@ public class ClassRepository : Repository<ClassEntity>, IClassRepository
 
             var totalCount = await _dbSet.CountAsync();
             var query = _dbSet
+                .Where(c => !c.IsDeleted)
                 .OrderBy(c => c.ClassName)
                 .ThenBy(c => c.Id);
 
             var items = await query
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
+                .Skip((filter.PageNumber - 1) * filter.PageSize)
+                .Take(filter.PageSize)
                 .ToListAsync();
 
-            return new PaginatedResponse<ClassEntity>(items, totalCount, pageNumber, pageSize);
+            return new PaginatedResponse<ClassEntity>(items, totalCount, filter.PageNumber, filter.PageSize);
         }
         catch (Exception ex)
         {

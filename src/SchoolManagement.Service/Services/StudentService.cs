@@ -30,7 +30,7 @@ public class StudentService : BaseService, IStudentService
 
     public async Task<PaginatedResponse<StudentResponseDto>> GetAllAsync(Filters filters)
     {
-        var students = await _unitOfWork.Students.GetAllPaged(filters.PageNumber, filters.PageSize);
+        var students = await _unitOfWork.Students.GetAllPaged(filters);
         return _mapper.Map<PaginatedResponse<StudentResponseDto>>(students);
     }
 
@@ -65,7 +65,7 @@ public class StudentService : BaseService, IStudentService
             {
                 _notifier.NotifyValidationErrors(validationResult);
                 var errors = _notifier.GetNotifications()
-                    .Select(n => new ErrorInfo { Message = n.Message, StatusCode = HttpStatusCode.BadRequest })
+                    .Select(n => new ErrorInfo { Message = n.Message, StatusCode = HttpStatusCode.BadRequest, Details = n.Type.ToString() }).Where(e => e.Details == "Error")
                     .FirstOrDefault();
                 return ResponseModel<StudentResponseDto>.Failure(errors);
             }

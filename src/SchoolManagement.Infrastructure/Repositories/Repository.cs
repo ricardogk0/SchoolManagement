@@ -56,7 +56,9 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
         try
         {
             _notifier.Handle($"Getting all {typeof(TEntity).Name}.");
-            return await _dbSet.ToListAsync();
+            return await _dbSet
+                .Where(e => !e.IsDeleted)
+                .ToListAsync();
         }
         catch (Exception ex)
         {
@@ -65,7 +67,7 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
         }
     }
 
-    public virtual async Task<PaginatedResponse<TEntity>> GetAllPaged(int pageNumber, int pageSize)
+    public virtual async Task<PaginatedResponse<TEntity>> GetAllPaged(Filters filters)
     {
         try
         {
@@ -73,11 +75,12 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 
             var totalCount = await _dbSet.CountAsync();
             var items = await _dbSet
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
+                .Skip((filters.PageNumber - 1) * filters.PageSize)
+                .Take(filters.PageSize)
+                .Where(e => !e.IsDeleted)
                 .ToListAsync();
 
-            return new PaginatedResponse<TEntity>(items, totalCount, pageNumber, pageSize);
+            return new PaginatedResponse<TEntity>(items, totalCount, filters.PageNumber, filters.PageSize);
         }
         catch (Exception ex)
         {
