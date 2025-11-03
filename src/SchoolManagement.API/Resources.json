@@ -4,6 +4,11 @@
       "Message": "error_create_student",
       "Details": "Error Create Student",
       "StatusCode": 400
+    },
+    "ErrorCreateClass": {
+      "Message": "error_create_class",
+      "Details": "Error Create Class",
+      "StatusCode": 400
     }
   }
 }

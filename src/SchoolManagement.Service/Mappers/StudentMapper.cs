@@ -1,6 +1,9 @@
 using AutoMapper;
 using SchoolManagement.Domain.Common;
 using System.Diagnostics.CodeAnalysis;
+using SchoolManagement.Domain.DTOs.Request;
+using SchoolManagement.Domain.Entities;
+using SchoolManagement.Domain.Dtos.Response;
 
 namespace SchoolManagement.Service.Mappers;
 
@@ -9,20 +12,20 @@ public class StudentMapper : Profile
 {
     public StudentMapper()
     {
-        CreateMap<Domain.Dtos.Request.StudentCreateDto, Domain.Entities.StudentEntity>()
+        CreateMap<StudentCreateDto, StudentEntity>()
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.CreatedBy, opt => opt.Ignore())
             .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
             .ForMember(dest => dest.UpdatedBy, opt => opt.Ignore())
             .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore());
         
-        CreateMap<Domain.Entities.StudentEntity, Domain.Dtos.Response.StudentResponseDto>();
+        CreateMap<StudentEntity, StudentResponseDto>();
 
-        CreateMap<IEnumerable<Domain.Entities.StudentEntity>, PaginatedResponse<Domain.Dtos.Response.StudentResponseDto>>()
+        CreateMap<IEnumerable<StudentEntity>, PaginatedResponse<StudentResponseDto>>()
             .ConvertUsing((src, dest, context) =>
             {
-                var studentDtos = context.Mapper.Map<List<Domain.Dtos.Response.StudentResponseDto>>(src);
-                return new PaginatedResponse<Domain.Dtos.Response.StudentResponseDto>(
+                var studentDtos = context.Mapper.Map<List<StudentResponseDto>>(src);
+                return new PaginatedResponse<StudentResponseDto>(
                     studentDtos, 
                     studentDtos.Count, 
                     1, 

@@ -1,6 +1,6 @@
-﻿using AutoMapper;
+using AutoMapper;
 using SchoolManagement.Domain.Common;
-using SchoolManagement.Domain.Dtos.Request;
+using SchoolManagement.Domain.DTOs.Request;
 using SchoolManagement.Domain.Dtos.Response;
 using SchoolManagement.Domain.DTOs.Response.Common;
 using SchoolManagement.Domain.Entities;
@@ -26,6 +26,26 @@ public class StudentService : BaseService, IStudentService
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _validationMessages = validationErrorMessages;
+    }
+
+    public async Task<PaginatedResponse<StudentResponseDto>> GetAllAsync()
+    {
+        var students = await _unitOfWork.Students.GetAll();
+        return _mapper.Map<PaginatedResponse<StudentResponseDto>>(students);
+    }
+
+    public async Task<StudentResponseDto?> GetByIdAsync(Guid studentId)
+    {
+        try
+        {
+            var student = await _unitOfWork.Students.GetById(studentId);
+            return _mapper.Map<StudentResponseDto>(student);
+        }
+        catch (Exception ex)
+        {
+            HandleException(ex);
+            return null;
+        }
     }
 
     public async Task<ResponseModel<StudentResponseDto>> CreateStudentAsync(StudentCreateDto student, string userEmail)
@@ -66,20 +86,48 @@ public class StudentService : BaseService, IStudentService
         }
     }
 
-    public async Task<PaginatedResponse<StudentResponseDto>> GetAllAsync()
-    {
-        var students = await _unitOfWork.Students.GetAll();
-        return _mapper.Map<PaginatedResponse<StudentResponseDto>>(students);
-    }
-
-    public async Task<StudentEntity?> GetByIdAsync(Guid studentId)
+    public async Task<StudentResponseDto?> UpdateStudentAsync(Guid studentId, StudentUpdateDto student, string userEmail)
     {
         try
         {
-            return await _unitOfWork.Students.GetById(studentId);
+            await _unitOfWork.BeginTransactionAsync();
+
+            var existingStudent = await _unitOfWork.Students.GetById(studentId);
+            if (existingStudent == null)
+            {
+                _notifier.Handle("Student not found", NotificationType.Error);
+                return null;
+            }
+
+            existingStudent.Name = student.Name ?? existingStudent.Name;
+            existingStudent.BirthDate = student.BirthDate ?? existingStudent.BirthDate;
+            existingStudent.DocumentNumber = student.DocumentNumber ?? existingStudent.DocumentNumber;
+            existingStudent.Email = student.Email ?? existingStudent.Email;
+            existingStudent.Password = student.Password ?? existingStudent.Password;
+
+            var validator = new StudentValidator(_unitOfWork);
+            validator.ConfigureRulesForUpdate(existingStudent);
+
+            var validationResult = await validator.ValidateAsync(existingStudent);
+            if (!validationResult.IsValid)
+            {
+                _notifier.NotifyValidationErrors(validationResult);
+                await _unitOfWork.RollbackTransactionAsync();
+                return null;
+            }
+
+            existingStudent.UpdatedBy = userEmail;
+            existingStudent.UpdatedAt = DateTime.UtcNow;
+
+            await _unitOfWork.Students.Update(existingStudent);
+            await _unitOfWork.SaveAsync();
+            await _unitOfWork.CommitTransactionAsync();
+
+            return _mapper.Map<StudentResponseDto>(existingStudent);
         }
         catch (Exception ex)
         {
+            await _unitOfWork.RollbackTransactionAsync();
             HandleException(ex);
             return null;
         }
@@ -106,45 +154,6 @@ public class StudentService : BaseService, IStudentService
         }
         catch (Exception ex)
         {
-            HandleException(ex);
-            return false;
-        }
-    }
-
-    public async Task<bool> UpdateStudentAsync(StudentEntity student, string userEmail)
-    {
-        try
-        {
-            await _unitOfWork.BeginTransactionAsync();
-
-            var existingStudent = await _unitOfWork.Students.GetById(student.Id);
-            if (existingStudent == null)
-            {
-                _notifier.Handle("Student not found", NotificationType.Error);
-                return false;
-            }
-
-            var validator = new StudentValidator(_unitOfWork);
-            validator.ConfigureRulesForUpdate(existingStudent);
-
-            var validationResult = await validator.ValidateAsync(student);
-            if (!validationResult.IsValid)
-            {
-                _notifier.NotifyValidationErrors(validationResult);
-                return false;
-            }
-
-            student.UpdatedBy = userEmail;
-
-            await _unitOfWork.Students.Update(student);
-            await _unitOfWork.SaveAsync();
-            await _unitOfWork.CommitTransactionAsync();
-
-            return true;
-        }
-        catch (Exception ex)
-        {
-            await _unitOfWork.RollbackTransactionAsync();
             HandleException(ex);
             return false;
         }

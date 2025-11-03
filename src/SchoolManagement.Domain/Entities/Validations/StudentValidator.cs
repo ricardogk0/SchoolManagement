@@ -58,8 +58,8 @@ public class StudentValidator : AbstractValidator<StudentEntity>
             .NotEmpty().WithMessage("Document number cannot be empty.")
             .MustAsync(async (documentNumber, cancellation) =>
             {
-                var existingStudent = await _unitOfWork.Students.Find(b => b.DocumentNumber == documentNumber);
-                return !existingStudent.Any();
+                var existingStudents = await _unitOfWork.Students.Find(b => b.DocumentNumber == documentNumber && b.Id != existingStudent.Id);
+                return !existingStudents.Any();
             }).WithMessage("A Student with this document already exists.")
             .MaximumLength(20).WithMessage("Document number cannot exceed 20 characters.");
 

@@ -1,4 +1,4 @@
-﻿namespace SchoolManagement.Domain.Dtos.Request;
+﻿namespace SchoolManagement.Domain.DTOs.Request;
 
 public class StudentCreateDto
 {
