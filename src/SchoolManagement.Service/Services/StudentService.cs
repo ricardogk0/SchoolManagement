@@ -11,6 +11,7 @@ using SchoolManagement.Domain.Interfaces.UoW;
 using SchoolManagement.Domain.Notifications;
 using SchoolManagement.Service.Resources;
 using System.Net;
+using SchoolManagement.Service.Security;
 
 namespace SchoolManagement.Service.Services;
 
@@ -70,6 +71,8 @@ public class StudentService : BaseService, IStudentService
                 return ResponseModel<StudentResponseDto>.Failure(errors);
             }
 
+            studentEntity.Password = PasswordHasher.Hash(studentEntity.Password);
+
             await _unitOfWork.Students.Add(studentEntity);
             await _unitOfWork.SaveAsync();
             await _unitOfWork.CommitTransactionAsync();
@@ -114,6 +117,11 @@ public class StudentService : BaseService, IStudentService
                 _notifier.NotifyValidationErrors(validationResult);
                 await _unitOfWork.RollbackTransactionAsync();
                 return null;
+            }
+
+            if (student.Password != null)
+            {
+                existingStudent.Password = PasswordHasher.Hash(student.Password);
             }
 
             existingStudent.UpdatedBy = userEmail;

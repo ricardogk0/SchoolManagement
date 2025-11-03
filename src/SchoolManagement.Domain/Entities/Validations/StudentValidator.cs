@@ -44,7 +44,9 @@ public class StudentValidator : AbstractValidator<StudentEntity>
 
         RuleFor(s => s.Password)
             .NotEmpty().WithMessage("Password cannot be empty.")
-            .MinimumLength(6).WithMessage("Password must be at least 6 characters long.");
+            .MinimumLength(8).WithMessage("Password must be at least 8 characters long.")
+            .Matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9]).{8,}$")
+                .WithMessage("Password must include upper/lowercase, numbers and special characters.");
     }
 
     public void ConfigureRulesForUpdate(StudentEntity existingStudent)
@@ -79,7 +81,9 @@ public class StudentValidator : AbstractValidator<StudentEntity>
 
         RuleFor(s => s.Password)
             .NotEmpty().WithMessage("Password cannot be empty.")
-            .MinimumLength(6).WithMessage("Password must be at least 6 characters long.");
+            .MinimumLength(8).WithMessage("Password must be at least 8 characters long.")
+            .Matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9]).{8,}$")
+                .WithMessage("Password must include upper/lowercase, numbers and special characters.");
     }
 
     private static bool IsValidCpf(string? documentNumber)
