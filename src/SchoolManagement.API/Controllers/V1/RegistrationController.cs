@@ -2,6 +2,7 @@ using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using SchoolManagement.Domain.DTOs.Request;
 using SchoolManagement.Domain.Interfaces.Services;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace SchoolManagement.API.Controllers.V1;
 
@@ -17,6 +18,9 @@ public class RegistrationController : ControllerBase
     }
 
     [HttpPost]
+    [SwaggerOperation(
+        Summary = "Registrar estudante em uma turma",
+        Description = "Realiza o vínculo de um estudante a uma turma específica e retorna os dados da matrícula.")]
     public async Task<IActionResult> RegisterStudent([FromBody] RegistrationCreateDto registrationDto)
     {
         var result = await _registrationService.RegisterStudentAsync(registrationDto);
@@ -24,6 +28,9 @@ public class RegistrationController : ControllerBase
     }
 
     [HttpGet("class/{classId}/students")]
+    [SwaggerOperation(
+        Summary = "Listar estudantes de uma turma",
+        Description = "Retorna a lista de estudantes matriculados na turma informada pelo ID.")]
     public async Task<IActionResult> GetStudentsByClass(Guid classId)
     {
         var result = await _registrationService.GetStudentsByClassAsync(classId);

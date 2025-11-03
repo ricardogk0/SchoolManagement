@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SchoolManagement.Domain.Common;
 using SchoolManagement.Domain.DTOs.Request;
 using SchoolManagement.Domain.Interfaces.Services;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace SchoolManagement.API.Controllers.V1;
 
@@ -18,6 +19,9 @@ public class StudentController : ControllerBase
     }
 
     [HttpGet]
+    [SwaggerOperation(
+        Summary = "Listar estudantes",
+        Description = "Retorna a lista paginada de estudantes com suporte a filtros de pesquisa e ordenação.")]
     public async Task<IActionResult> GetAllStudents(Filters filters)
     {
         var students = await _studentService.GetAllAsync(filters);
@@ -25,6 +29,9 @@ public class StudentController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [SwaggerOperation(
+        Summary = "Obter estudante por ID",
+        Description = "Retorna os detalhes do estudante identificado pelo ID informado.")]
     public async Task<IActionResult> GetStudentById(Guid id)
     {
         var student = await _studentService.GetByIdAsync(id);
@@ -36,6 +43,9 @@ public class StudentController : ControllerBase
     }
 
     [HttpPost]
+    [SwaggerOperation(
+        Summary = "Criar estudante",
+        Description = "Cria um novo estudante com os dados fornecidos e retorna o registro criado.")]
     public async Task<IActionResult> CreateStudent([FromBody] StudentCreateDto studentCreateDto)
     {
         var userEmail = User.Identity?.Name ?? "ricardokevi@gmail.com";
@@ -44,6 +54,9 @@ public class StudentController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [SwaggerOperation(
+        Summary = "Atualizar estudante",
+        Description = "Atualiza os dados do estudante pelo ID. Retorna 404 caso não seja encontrado.")]
     public async Task<IActionResult> UpdateStudent(Guid id, [FromBody] StudentUpdateDto studentUpdateDto)
     {
         var userEmail = User.Identity?.Name ?? "ricardokevi@gmail.com";
@@ -56,6 +69,9 @@ public class StudentController : ControllerBase
     }
 
     [HttpPatch("{id}/soft-delete")]
+    [SwaggerOperation(
+        Summary = "Desativar estudante (soft delete)",
+        Description = "Marca o estudante como inativo sem removê-lo fisicamente do banco de dados.")]
     public async Task<IActionResult> SoftDeleteStudent(Guid id)
     {
         var userEmail = User.Identity?.Name ?? "ricardokevi@gmail.com";

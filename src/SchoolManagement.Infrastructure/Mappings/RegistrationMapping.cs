@@ -12,13 +12,23 @@ public class RegistrationMapping : EntityBaseMapping<RegistrationEntity>
 
         builder.ToTable("registrations");
 
+        builder.Property<Guid>("StudentId")
+               .HasColumnName("student_id")
+               .IsRequired();
+
         builder.HasOne(r => r.Student)
                .WithMany()
+               .HasForeignKey("StudentId")
                .OnDelete(DeleteBehavior.Restrict)
+               .IsRequired();
+
+        builder.Property<Guid>("ClassId")
+               .HasColumnName("class_id")
                .IsRequired();
 
         builder.HasOne(r => r.Class)
                .WithMany()
+               .HasForeignKey("ClassId")
                .OnDelete(DeleteBehavior.Restrict)
                .IsRequired();
     }

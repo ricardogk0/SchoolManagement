@@ -7,6 +7,7 @@ using SchoolManagement.Domain.DTOs.Response;
 using SchoolManagement.Service.Security;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace SchoolManagement.API.Controllers.V1;
 
@@ -25,6 +26,9 @@ public class AuthController : ControllerBase
 
     [AllowAnonymous]
     [HttpPost("login")]
+    [SwaggerOperation(
+        Summary = "Autenticar e gerar token JWT",
+        Description = "Valida as credenciais do administrador e retorna um token JWT com informações de acesso.")]
     public IActionResult Login([FromBody] LoginRequestDto request)
     {
         var adminSection = _configuration.GetSection("AdminCredentials");

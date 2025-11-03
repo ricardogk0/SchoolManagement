@@ -11,18 +11,23 @@ public abstract class EntityBaseMapping<TEntity> : IEntityTypeConfiguration<TEnt
         builder.HasKey(e => e.Id);
 
         builder.Property(e => e.CreatedAt)
-               .IsRequired();
+               .IsRequired()
+               .HasColumnName("created_at");
 
         builder.Property(e => e.CreatedBy)
-               .IsRequired();
+               .IsRequired()
+               .HasColumnName("created_by");
 
         builder.Property(e => e.UpdatedAt)
-                .IsRequired(false);
+                .IsRequired(false)
+                .HasColumnName("updated_at");
 
         builder.Property(e => e.UpdatedBy)
-                .IsRequired(false);
+                .IsRequired(false)
+                .HasColumnName("updated_by");
 
         builder.Property(e => e.IsDeleted)
-                .IsRequired();
+                .IsRequired()
+                .HasColumnName("is_deleted");
     }
 }

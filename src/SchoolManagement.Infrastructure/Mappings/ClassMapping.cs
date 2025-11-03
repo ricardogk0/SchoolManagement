@@ -14,10 +14,12 @@ public class ClassMapping : EntityBaseMapping<ClassEntity>
 
         builder.Property(c => c.ClassName)
                .IsRequired()
+               .HasColumnName("class_name")
                .HasMaxLength(100);
 
         builder.Property(c => c.Description)
                 .IsRequired()
+                .HasColumnName("description")
                 .HasMaxLength(255);
     }
 }

@@ -13,6 +13,7 @@ public static class SwaggerConfig
     {
         services.AddSwaggerGen(c =>
         {
+            c.EnableAnnotations();
             ConfigureSwaggerOperations(c);
             ConfigureSwaggerSecurity(c);
             c.DocumentFilter<ReplaceVersionWithExactValueInPath>();

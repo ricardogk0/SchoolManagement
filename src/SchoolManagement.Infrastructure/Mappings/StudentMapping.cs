@@ -14,21 +14,26 @@ public class StudentMapping : EntityBaseMapping<StudentEntity>
 
         builder.Property(s => s.Name)
                .IsRequired()
+               .HasColumnName("name")
                .HasMaxLength(100);
 
         builder.Property(s => s.BirthDate)
-               .IsRequired();
+               .IsRequired()
+               .HasColumnName("birth_date");
 
         builder.Property(s => s.DocumentNumber)
                .IsRequired()
+               .HasColumnName("document_number")
                .HasMaxLength(20);
 
         builder.Property(s => s.Email)
                .IsRequired()
+               .HasColumnName("email")
                .HasMaxLength(100);
 
         builder.Property(s => s.Password)
                .IsRequired()
+               .HasColumnName("password")
                .HasMaxLength(255);
     }
 }
