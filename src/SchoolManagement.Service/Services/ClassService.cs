@@ -28,18 +28,17 @@ public class ClassService : BaseService, IClassService
         _validationMessages = validationErrorMessages;
     }
 
-    public async Task<PaginatedResponse<ClassResponseDto>> GetAllAsync()
+    public async Task<PaginatedResponse<ClassResponseDto>> GetAllAsync(Filters filters)
     {
-        var classes = await _unitOfWork.Classes.GetAll();
-        var dtos = _mapper.Map<List<ClassResponseDto>>(classes);
+        var classes = await _unitOfWork.Classes.GetAllPaged(filters);
+        var dtos = _mapper.Map<PaginatedResponse<ClassResponseDto>>(classes);
 
-        foreach (var dto in dtos)
+        foreach (var dto in dtos.Items)
         {
             dto.StudentCount = await _unitOfWork.Registrations.GetStudentCountByClass(dto.Id);
         }
 
-        var ordered = dtos.OrderBy(c => c.ClassName).ToList();
-        return new PaginatedResponse<ClassResponseDto>(ordered, ordered.Count, 1, ordered.Count);
+        return dtos;
     }
 
     public async Task<ClassResponseDto?> GetByIdAsync(Guid classId)

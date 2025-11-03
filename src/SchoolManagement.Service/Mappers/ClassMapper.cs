@@ -19,6 +19,11 @@ public class ClassMapper : Profile
 
         CreateMap<ClassEntity, ClassResponseDto>();
 
+        CreateMap<PaginatedResponse<ClassEntity>, PaginatedResponse<ClassResponseDto>>()
+            .ForMember(dest => dest.Items,
+               opt => opt.MapFrom(src => src.Items
+                   .OrderBy(s => s.ClassName)));
+
         CreateMap<IEnumerable<ClassEntity>, PaginatedResponse<ClassResponseDto>>()
             .ConvertUsing((src, dest, context) =>
             {

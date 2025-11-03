@@ -8,7 +8,7 @@ namespace SchoolManagement.Domain.Interfaces.Services;
 
 public interface IClassService
 {
-    Task<PaginatedResponse<ClassResponseDto>> GetAllAsync();
+    Task<PaginatedResponse<ClassResponseDto>> GetAllAsync(Filters filters);
     Task<ClassResponseDto?> GetByIdAsync(Guid classId);
     Task<ResponseModel<ClassResponseDto>> CreateClassAsync(ClassCreateDto classe, string userEmail);
     Task<ClassResponseDto?> UpdateClassAsync(Guid classId, ClassUpdateDto classe, string userEmail);
